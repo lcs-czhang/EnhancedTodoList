@@ -6,13 +6,25 @@
 //
 
 import SwiftUI
-
+ 
 struct LandingView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        TabView {
+            TodoListView()
+                .tabItem {
+                    Text("Tasks")
+                    Image(systemName: "checklist")
+                }
+            
+            StatisticsView()
+                .tabItem {
+                    Text("Stats")
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                }
+        }
     }
 }
-
+ 
 #Preview {
     LandingView()
 }
