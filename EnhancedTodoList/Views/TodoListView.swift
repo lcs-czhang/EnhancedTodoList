@@ -12,11 +12,21 @@ struct TodoListView: View {
     // MARK: Stored properties
     // The item currently being created
     @State private var newItemDetails = ""
-
+    @State private var searchText = ""
     // Our list of items to complete
     @State private var items: [TodoItem] = []
     
     // MARK: Computed properties
+    var filteredItems: [TodoItem] {
+        if searchText.isEmpty {
+            return items
+        } else {
+            return items.filter { item in
+                item.details.lowercased().contains(searchText.lowercased())
+            }
+        }
+    }
+
     var body: some View {
         NavigationStack {
             VStack {
@@ -77,6 +87,7 @@ struct TodoListView: View {
                 items.append(contentsOf: exampleData)
             }
         }
+        .searchable(text: $searchText)
     }
     // MARK: Functions
     func addItem() {
@@ -94,8 +105,8 @@ struct TodoListView: View {
         }
         
     }
-
-
+    
+    
     
 }
 
