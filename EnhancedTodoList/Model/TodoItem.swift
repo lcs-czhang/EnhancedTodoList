@@ -5,10 +5,10 @@
 //  Created by Yuzhou Zhang on 2024-11-29.
 //
 
-import Observation
 import Foundation
+import SwiftData
  
-@Observable
+@Model
 class TodoItem: Identifiable {
     
     let id = UUID()

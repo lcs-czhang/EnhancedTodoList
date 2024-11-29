@@ -5,16 +5,24 @@
 //  Created by Yuzhou Zhang on 2024-11-29.
 //
 
+import SwiftData
 import SwiftUI
 
 struct TodoListView: View {
     
     // MARK: Stored properties
+    // Access the model context so we can "CRUD" data
+    @Environment(\.modelContext) private var modelContext
+
     // The item currently being created
     @State private var newItemDetails = ""
+    
+    //The search text provided by the user
     @State private var searchText = ""
-    // Our list of items to complete
-    @State private var items: [TodoItem] = []
+    
+    // Run a query to obtain the list of to-do items
+    @Query private var items: [TodoItem]
+
     
     // MARK: Computed properties
     var filteredItems: [TodoItem] {
@@ -66,33 +74,19 @@ struct TodoListView: View {
                                     }
                                 
                             }
-                            .swipeActions {
-                                Button(
-                                    "Delete",
-                                    role: .destructive,
-                                    action: {
-                                    }
-                                )
-                            }
                         }
+                        .onDelete(perform: delete)
                     }
-                    
+                    .searchable(text: $searchText)
                 }
             }
             .navigationTitle("Tasks")
         }
-        .onAppear {
-            // Populate with example data
-            if items.isEmpty {
-                items.append(contentsOf: exampleData)
-            }
-        }
-        .searchable(text: $searchText)
     }
     // MARK: Functions
     func addItem() {
         let newToDoItem = TodoItem(details: newItemDetails)
-        items.insert(newToDoItem, at: 0)
+        modelContext.insert(newToDoItem)
         newItemDetails = ""
     }
     func toggle(item: TodoItem) {
@@ -105,7 +99,12 @@ struct TodoListView: View {
         }
         
     }
-    
+    func delete(at offsets: IndexSet) {
+        for offset in offsets {
+            modelContext.delete(items[offset])
+        }
+    }
+
     
     
 }
