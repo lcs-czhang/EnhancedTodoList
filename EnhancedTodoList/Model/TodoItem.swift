@@ -31,10 +31,28 @@ class TodoItem: Identifiable {
  
 }
  
-let exampleData = [
+extension TodoItem {
     
-    TodoItem(details: "Go for a walk"),
-    TodoItem(details: "Study for Physics"),
-    TodoItem(details: "Call mom"),
-    
-]
+    @MainActor
+    static var preview: ModelContainer {
+        
+        let container = try! ModelContainer(
+            for: TodoItem.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
+        
+        // Add mock data
+        container.mainContext.insert(
+            TodoItem(details: "Go for a walk", isCompleted: false)
+        )
+        container.mainContext.insert(
+            TodoItem(details: "Have a nap", isCompleted: true)
+        )
+        container.mainContext.insert(
+            TodoItem(details: "Call mom", isCompleted: false)
+        )
+ 
+        return container
+    }
+}
+
