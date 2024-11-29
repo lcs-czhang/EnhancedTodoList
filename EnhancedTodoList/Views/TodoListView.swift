@@ -27,10 +27,10 @@ struct TodoListView: View {
                     Button("Add") {
                         addItem()
                     }
-                 
+                    
                 }
                 .padding(20)
-
+                
                 if items.isEmpty {
                     
                     ContentUnavailableView(label: {
@@ -45,15 +45,25 @@ struct TodoListView: View {
                     
                 } else {
                     
-                    List(items) { currentItem in
-                        Label {
-                            Text(currentItem.details)
-                        } icon: {
-                            Image(systemName: currentItem.isCompleted ? "checkmark.circle" : "circle")
-                                .onTapGesture {
-                                    toggle(item: currentItem)
-                                }
-
+                    List{
+                        ForEach(filteredItems) { currentItem in
+                            Label {
+                                Text(currentItem.details)
+                            } icon: {
+                                Image(systemName: currentItem.isCompleted ? "checkmark.circle" : "circle")
+                                    .onTapGesture {
+                                        toggle(item: currentItem)
+                                    }
+                                
+                            }
+                            .swipeActions {
+                                Button(
+                                    "Delete",
+                                    role: .destructive,
+                                    action: {
+                                    }
+                                )
+                            }
                         }
                     }
                     
